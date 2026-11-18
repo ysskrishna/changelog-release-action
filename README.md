@@ -1,6 +1,7 @@
 # Release from Changelog or Tag
 
 [![CI](https://github.com/ysskrishna/changelog-release-action/actions/workflows/test.yml/badge.svg)](https://github.com/ysskrishna/changelog-release-action/actions/workflows/test.yml)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-Release%20from%20Changelog%20or%20Tag-blue?logo=github)](https://github.com/marketplace/actions/release-from-changelog-or-tag)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/ysskrishna/changelog-release-action?label=release)](https://github.com/ysskrishna/changelog-release-action/releases)
 [![Author site](https://img.shields.io/badge/author-ysskrishna.space-informational)](https://ysskrishna.space)
@@ -184,6 +185,7 @@ MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](LICE
   <a href="https://github.com/ysskrishna">Author's GitHub</a> •
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
   <a href="https://ysskrishna.space">Author's site</a> •
+  <a href="https://github.com/marketplace/actions/release-from-changelog-or-tag">GitHub Marketplace</a> •
   <a href="examples/README.md">Examples</a> •
   <a href="https://github.com/ysskrishna/changelog-release-action/releases">Releases</a> •
   <a href="https://github.com/ysskrishna/changelog-release-action/issues">Report Issues</a>
