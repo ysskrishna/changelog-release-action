@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Changelog Release is preparing its first release. After publication, only the latest release receives security fixes.
+Only the latest release of Changelog Release receives security fixes.
 
 Pin the action to the latest release tag or a reviewed commit SHA.
 

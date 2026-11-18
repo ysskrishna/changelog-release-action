@@ -9,6 +9,8 @@ import unittest
 from composite import run_composite
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
 class ReleaseTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -75,6 +77,14 @@ class ReleaseTests(unittest.TestCase):
     def test_workflow_token_is_used_when_no_override_is_set(self):
         result = self.run_action(GH_TOKEN="")
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_first_release_changelog_matches_version_tag(self):
+        (self.repo / "CHANGELOG.md").write_text((ROOT / "CHANGELOG.md").read_text())
+        self.git("tag", "v1.0.0")
+        result = self.run_action(GITHUB_REF="refs/tags/v1.0.0")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.release()["name"], "Release v1.0.0")
+        self.assertIn("Create a GitHub Release", self.release()["body"])
 
     def test_missing_workflow_token_and_override_fail(self):
         self.workflow_token = ""

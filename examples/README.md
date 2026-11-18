@@ -2,8 +2,6 @@
 
 Ready-to-copy workflows for [Changelog Release](../README.md). Copy the selected file into your repository's `.github/workflows/` directory.
 
-The first action release is pending. These workflows use `ysskrishna/changelog-release-action@v1`, which becomes available after publication.
-
 | Workflow | What it does | Before you use it |
 | --- | --- | --- |
 | [Release from changelog](release-from-changelog.yml) | Publish the matching version section with the default settings | Add a nonempty version section to `CHANGELOG.md` |
