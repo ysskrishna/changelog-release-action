@@ -1,0 +1,28 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "url": "https://context7.com/ysskrishna/changelog-release-action",
+  "public_key": "pk_VesXVq9WjBT8ecKU9XIZz",
+  "projectTitle": "Release from Changelog or Tag",
+  "description": "GitHub Action that creates a GitHub Release from a matching changelog section or annotated tag message, with optional title and asset uploads.",
+  "excludeFolders": [
+    "archive",
+    "archived",
+    "old",
+    "deprecated",
+    "legacy",
+    "tests",
+    ".github",
+    "scripts"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "changelog.md",
+    "LICENSE.md",
+    "license.md",
+    "CODE_OF_CONDUCT.md",
+    "NEWS.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "AGENTS.md"
+  ]
+}
