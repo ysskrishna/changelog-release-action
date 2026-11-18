@@ -12,12 +12,12 @@ This file records rollout progress. Consumer documentation describes normal usag
 | Markdown fence and duplicate asset fixes | Implemented with regression coverage |
 | Composite entry-point coverage | Tests execute metadata defaults, input/environment mappings, command, and public outputs |
 | README review findings 5-11 | Addressed; release notices removed, long explanations collapsed, support matches the reference |
-| Local tests and final Ubuntu CI | Verify on the final PR commit before publication |
+| Local tests and Ubuntu CI | 27 integration tests pass in a fresh environment; hosted Ubuntu passes on runtime commit 80b46b4 |
 | Hosted macOS CI | Deferred by maintainer because of transient runner availability; excluded from the CI matrix |
 | Merge, v1.0.0 release, and v1 tag | Awaiting the reviewed publication step |
 | Marketplace name | Original Changelog Release name conflicts with an existing 3liz listing; alternate display name requested |
 | Marketplace listing and badge | Publish after the version release; add only the verified listing URL |
-| gitingest-action pilot | Update the draft migration to the corrected action commit, run fixture CI, then perform a named live release |
+| gitingest-action pilot | Composite fixture and all four existing integration jobs pass on 43b24d1, pinned to action 80b46b4; named live release remains to be performed |
 | Remaining 21 repositories | Migrate after the live pilot passes |
 
 ## Follow-up PR after Marketplace publication
@@ -30,3 +30,8 @@ This file records rollout progress. Consumer documentation describes normal usag
 ## Release evidence
 
 Record the published version tag, commit SHA, Marketplace URL, consumer version, and successful live workflow links here after publication. Local fixtures do not replace the live pilot.
+
+Pre-publication checks:
+
+- [Action Ubuntu integration](https://github.com/ysskrishna/changelog-release-action/actions/runs/44367684093) passes for runtime commit 80b46b4.
+- [Consumer composite fixture](https://github.com/ysskrishna/gitingest-action/actions/runs/44367731768) and [existing consumer tests](https://github.com/ysskrishna/gitingest-action/actions/runs/44367731786) pass for 43b24d1.
