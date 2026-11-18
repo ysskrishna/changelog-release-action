@@ -13,3 +13,5 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Customize the release body source, changelog path, title, and uploaded assets through four optional inputs.
 - Skip existing releases and expose the release URL and whether it was created.
 - Fail clearly when the selected notes or requested asset files are missing.
+- Ready-to-copy example workflows for changelog releases, annotated tags, custom titles and paths, and source assets.
+- Repository badges, maintainer and support links, funding configuration, code ownership, security policy, and Context7 configuration following the PyPI Package Stats Action layout.

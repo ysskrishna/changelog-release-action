@@ -1,0 +1,35 @@
+name: Release with source assets
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build source archive and checksum
+        run: |
+          mkdir -p dist
+          git archive --format=zip --output=dist/source.zip HEAD
+          (cd dist && sha256sum source.zip > checksums.txt)
+      - name: Create GitHub Release
+        uses: ysskrishna/changelog-release-action@v1
+        with:
+          release-assets: |
+            dist/source.zip
+            dist/checksums.txt
