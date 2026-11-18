@@ -149,7 +149,7 @@ python3 tests/pilot.py /path/to/consumer
 
 Tests execute the single-step `action.yml` metadata in a controlled fixture context, including its defaults, environment mappings, run command, and public outputs. They use real temporary Git repositories and a fake GitHub CLI, without network calls or real releases. The fixture runner is limited to the expressions this action uses; it is not a general GitHub Actions runner. Hosted CI also checks the composite action's non-tag rejection.
 
-The runtime is in `scripts/release.sh`. Python and PyYAML are test dependencies only. See [Publishing Release from Changelog or Tag](docs/RELEASING.md) for maintainer release instructions.
+The runtime is in `scripts/release.sh`. Python and PyYAML are test dependencies only.
 
 </details>
 

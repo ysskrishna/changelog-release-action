@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
 ## [1.0.0] - 2026-11-18
 
 ### Added
@@ -18,5 +16,4 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Ready-to-copy example workflows for changelog releases, annotated tags, custom titles and paths, and source assets.
 - Configuration documentation, maintainer and support links, funding configuration, code ownership, and a security reporting policy.
 
-[Unreleased]: https://github.com/ysskrishna/changelog-release-action/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/ysskrishna/changelog-release-action/releases/tag/v1.0.0
