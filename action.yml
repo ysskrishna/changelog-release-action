@@ -1,0 +1,47 @@
+name: Release from Changelog or Tag
+description: Create a GitHub Release from your changelog or annotated tag message.
+author: Y. Siva Sai Krishna
+branding:
+  icon: tag
+  color: blue
+
+inputs:
+  release-body-source:
+    description: 'Where the release body comes from: changelog or tag. An empty source fails.'
+    required: false
+    default: changelog
+  release-changelog-path:
+    description: Path to your changelog file, relative to the checked-out repository.
+    required: false
+    default: CHANGELOG.md
+  release-title:
+    description: 'Release title. Leave empty to use Release followed by the tag, such as Release v1.2.3.'
+    required: false
+    default: ''
+  release-assets:
+    description: 'Files to upload, one literal path per line. Build these files before running this action.'
+    required: false
+    default: ''
+
+outputs:
+  release-url:
+    description: URL of the created or existing GitHub Release.
+    value: ${{ steps.release.outputs.release-url }}
+  release-created:
+    description: 'true when a release was created; false when an existing release was skipped.'
+    value: ${{ steps.release.outputs.release-created }}
+
+runs:
+  using: composite
+  steps:
+    - name: Create GitHub Release
+      id: release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ env.GH_TOKEN || github.token }}
+        RELEASE_BODY_SOURCE: ${{ inputs.release-body-source }}
+        RELEASE_CHANGELOG_PATH: ${{ inputs.release-changelog-path }}
+        RELEASE_TITLE: ${{ inputs.release-title }}
+        RELEASE_ASSETS: ${{ inputs.release-assets }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: bash "$ACTION_PATH/scripts/release.sh"
