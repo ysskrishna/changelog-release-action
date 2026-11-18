@@ -76,6 +76,12 @@ class ReleaseTests(unittest.TestCase):
                                                      "-checksum.txt": "checksum fixture"})
         self.assertFalse((self.repo / "INJECTED").exists())
 
+    def test_changelog_filename_is_a_literal_path(self):
+        (self.repo / "CHANGELOG.md").rename(self.repo / "history=release.md")
+        result = self.run_action(RELEASE_CHANGELOG_PATH="history=release.md")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.release()["body"].strip(), "### Fixed\n\n- Login works again.")
+
     def test_annotated_tag_body_is_used_verbatim(self):
         message = "Release 1.2.3\n\nLogin works again. $(touch INJECTED)"
         self.git("-c", "user.name=Test", "-c", "user.email=test@example.com",

@@ -52,6 +52,7 @@ fi
 notes="$temp_dir/notes.md"
 if [[ "$source" == changelog ]]; then
   [[ -f "$changelog" ]] || fail 'The changelog file is missing. Check release-changelog-path.'
+  [[ "$changelog" == /* ]] || changelog="$PWD/$changelog"
   version="${tag#v}"
   awk -v version="$version" '
     {
