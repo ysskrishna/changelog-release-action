@@ -1,6 +1,6 @@
 # Usage Examples
 
-Ready-to-copy workflows for [Changelog Release](../README.md). Copy the selected file into your repository's `.github/workflows/` directory.
+Ready-to-copy workflows for [Release from Changelog or Tag](../README.md). Copy the selected file into your repository's `.github/workflows/` directory.
 
 | Workflow | What it does | Before you use it |
 | --- | --- | --- |

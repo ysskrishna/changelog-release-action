@@ -1,4 +1,4 @@
-name: Changelog Release
+name: Release from Changelog or Tag
 description: Create a GitHub Release from your changelog or annotated tag message.
 author: Y. Siva Sai Krishna
 branding:

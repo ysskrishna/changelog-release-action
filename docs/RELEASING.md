@@ -1,4 +1,4 @@
-# Publishing Changelog Release
+# Publishing Release from Changelog or Tag
 
 ## Version tags
 

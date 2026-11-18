@@ -1,6 +1,6 @@
 # Release ledger
 
-Updated: 2026-11-18
+Updated: 2026-11-19
 
 This file records rollout progress. Consumer documentation describes normal usage rather than the current publication state.
 
@@ -15,7 +15,7 @@ This file records rollout progress. Consumer documentation describes normal usag
 | Local tests and Ubuntu CI | 27 integration tests pass in a fresh environment; hosted Ubuntu passes on runtime commit 80b46b4 |
 | Hosted macOS CI | Deferred by maintainer because of transient runner availability; excluded from the CI matrix |
 | Merge, v1.0.0 release, and v1 tag | Awaiting the reviewed publication step |
-| Marketplace name | Original Changelog Release name conflicts with an existing 3liz listing; alternate display name requested |
+| Marketplace name | Release from Changelog or Tag, selected by the maintainer on 2026-11-19; repository remains ysskrishna/changelog-release-action |
 | Marketplace listing and badge | Publish after the version release; add only the verified listing URL |
 | gitingest-action pilot | Composite fixture and all four existing integration jobs pass on 43b24d1, pinned to action 80b46b4; named live release remains to be performed |
 | Remaining 21 repositories | Migrate after the live pilot passes |

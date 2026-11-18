@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Only the latest release of Changelog Release receives security fixes.
+Only the latest release of Release from Changelog or Tag receives security fixes.
 
 Pin the action to the latest release tag or a reviewed commit SHA.
 

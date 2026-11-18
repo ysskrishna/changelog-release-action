@@ -1,4 +1,4 @@
-# Changelog Release
+# Release from Changelog or Tag
 
 [![CI](https://github.com/ysskrishna/changelog-release-action/actions/workflows/test.yml/badge.svg)](https://github.com/ysskrishna/changelog-release-action/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -149,13 +149,13 @@ python3 tests/pilot.py /path/to/consumer
 
 Tests execute the single-step `action.yml` metadata in a controlled fixture context, including its defaults, environment mappings, run command, and public outputs. They use real temporary Git repositories and a fake GitHub CLI, without network calls or real releases. The fixture runner is limited to the expressions this action uses; it is not a general GitHub Actions runner. Hosted CI also checks the composite action's non-tag rejection.
 
-The runtime is in `scripts/release.sh`. Python and PyYAML are test dependencies only. See [Publishing Changelog Release](docs/RELEASING.md) for maintainer release instructions.
+The runtime is in `scripts/release.sh`. Python and PyYAML are test dependencies only. See [Publishing Release from Changelog or Tag](docs/RELEASING.md) for maintainer release instructions.
 
 </details>
 
 ## Built and maintained by
 
-Changelog Release is built and maintained by:
+Release from Changelog or Tag is built and maintained by:
 
 | | Name | GitHub | Role |
 | --- | --- | --- | --- |
