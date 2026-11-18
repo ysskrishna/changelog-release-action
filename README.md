@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/ysskrishna/changelog-release-action?label=release)](https://github.com/ysskrishna/changelog-release-action/releases)
 [![Author site](https://img.shields.io/badge/author-ysskrishna.space-informational)](https://ysskrishna.space)
+[![Context7](https://img.shields.io/badge/Context7-docs-18181B)](https://context7.com/ysskrishna/changelog-release-action)
+[![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-ask-18181B)](https://deepwiki.com/ysskrishna/changelog-release-action)
 
 A GitHub Action to create GitHub Releases from your changelog section or annotated tag message, with optional asset uploads.
 
