@@ -175,6 +175,36 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.release()["body"].strip(), body)
 
+    def test_indented_fences_preserve_headings_and_following_notes(self):
+        for marker in ["```", "~~~"]:
+            for indentation in [" ", "  ", "   "]:
+                with self.subTest(marker=marker, indentation=indentation):
+                    self.state.write_text("{}")
+                    body = (f"Example:\n\n{indentation}{marker}markdown\n## Example heading\n"
+                            f"{indentation}{marker}\n\nImportant fix after the example.")
+                    (self.repo / "CHANGELOG.md").write_text(
+                        "## [1.2.3]\n\n" + body + "\n\n## [1.2.2]\nOlder change.\n")
+                    result = self.run_action()
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(self.release()["body"].strip(), body)
+
+    def test_only_a_matching_closing_fence_ends_a_code_block(self):
+        body = ("Example:\n\n````markdown\n```\n## Inner heading\n~~~\n"
+                "````not-a-closing-fence\n## Another inner heading\n`````\n\nImportant fix.")
+        (self.repo / "CHANGELOG.md").write_text(
+            "## [1.2.3]\n\n" + body + "\n\n## [1.2.2]\nOlder change.\n")
+        result = self.run_action()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.release()["body"].strip(), body)
+
+    def test_duplicate_asset_filenames_fail_before_creation(self):
+        for folder in ["linux", "macos"]:
+            (self.repo / folder).mkdir()
+            (self.repo / folder / "app.zip").write_text(folder + " binary")
+        self.assert_failed(self.run_action(RELEASE_ASSETS="linux/app.zip\nmacos/app.zip"),
+                           "unique filename")
+        self.assertNotIn("create_attempted", json.loads(self.state.read_text()))
+
     def test_existing_release_is_unchanged_even_without_notes(self):
         original = {"name": "Original", "body": "Keep this", "html_url": "https://example.com/release"}
         self.state.write_text(json.dumps({"release": original}))

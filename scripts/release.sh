@@ -57,10 +57,18 @@ if [[ "$source" == changelog ]]; then
   awk -v version="$version" '
     {
       sub(/\r$/, "")
-      if ($0 ~ /^```/ || $0 ~ /^~~~/) {
-        marker = substr($0, 1, 3)
-        if (!fence) fence = marker
-        else if (fence == marker) fence = ""
+      line = $0
+      sub(/^ ? ? ?/, "", line)
+      if (match(line, /^(```+|~~~+)/)) {
+        marker = substr(line, 1, 1)
+        count = RLENGTH
+        rest = substr(line, count + 1)
+        if (fence) {
+          if (marker == fence && count >= fence_length && rest ~ /^[ \t]*$/) fence = ""
+        } else if (marker == "~" || rest !~ /`/) {
+          fence = marker
+          fence_length = count
+        }
         if (emit) print
         next
       }
@@ -85,12 +93,18 @@ fi
 
 command_args=(release create "$tag" --repo "$GITHUB_REPOSITORY" --verify-tag
   --title "$title" --notes-file "$notes" --)
+asset_names=$'\n'
 while IFS= read -r asset || [[ -n "$asset" ]]; do
   asset="${asset%$'\r'}"
   [[ -n "$asset" ]] || continue
   [[ -f "$asset" ]] || fail 'A release asset file is missing. Use literal file paths, one per line; wildcards are not expanded.'
   [[ "$asset" != *'#'* ]] || fail 'Release asset filenames cannot contain # because GitHub CLI treats it as a label separator.'
   [[ "$asset" == /* ]] || asset="$PWD/$asset"
+  asset_name="${asset##*/}"
+  case "$asset_names" in
+    *$'\n'"$asset_name"$'\n'*) fail 'Each release asset must have a unique filename. Rename files that share the same filename.' ;;
+  esac
+  asset_names+="$asset_name"$'\n'
   command_args+=("$asset")
 done <<< "${RELEASE_ASSETS:-}"
 

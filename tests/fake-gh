@@ -17,6 +17,8 @@ if args[0] == "api":
         print(f"gh: API failure (HTTP {status})", file=sys.stderr)
         sys.exit(1)
 elif args[:2] == ["release", "create"]:
+    state["create_attempted"] = True
+    state_path.write_text(json.dumps(state))
     if state.get("create_failure"):
         print("Release creation failed", file=sys.stderr)
         sys.exit(1)
@@ -24,11 +26,15 @@ elif args[:2] == ["release", "create"]:
         sys.exit("unsafe release command")
     def value(flag):
         return args[args.index(flag) + 1]
+    assets = args[args.index("--") + 1:]
+    names = [Path(p).name for p in assets]
+    if len(names) != len(set(names)):
+        sys.exit("GitHub upload rejected: duplicate asset name (HTTP 422)")
     state["release"] = {
         "tag_name": args[2],
         "name": value("--title"),
         "body": Path(value("--notes-file")).read_text(),
-        "assets": {Path(p).name: Path(p).read_text() for p in args[args.index("--") + 1:]},
+        "assets": {Path(p).name: Path(p).read_text() for p in assets},
         "html_url": "https://github.com/example/project/releases/tag/" + args[2],
     }
     state_path.write_text(json.dumps(state))
