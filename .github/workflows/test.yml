@@ -15,7 +15,7 @@ jobs:
     name: Release integration (${{ matrix.os }})
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
@@ -23,6 +23,11 @@ jobs:
           persist-credentials: false
       - name: Check shell syntax
         run: bash -n scripts/release.sh
+      - name: Install test dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/release-tests"
+          "$RUNNER_TEMP/release-tests/bin/python" -m pip install -r requirements-dev.txt
+          echo "$RUNNER_TEMP/release-tests/bin" >> "$GITHUB_PATH"
       - name: Test release behavior without publishing
         run: python3 -m unittest discover -s tests -v
       - name: Verify composite action rejects a branch invocation

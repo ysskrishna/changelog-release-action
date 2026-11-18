@@ -6,10 +6,9 @@ import subprocess
 import tempfile
 import unittest
 
+from composite import run_composite
+
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts/release.sh"
-
-
 class ReleaseTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -31,20 +30,29 @@ class ReleaseTests(unittest.TestCase):
         self.state.write_text("{}")
         self.output = self.repo / "output"
         self.output.touch()
+        self.workflow_token = "workflow-token-fixture"
         self.env = dict(os.environ, PATH=str(bin_dir) + os.pathsep + os.environ["PATH"],
                         GITHUB_WORKSPACE=str(self.repo), GITHUB_REPOSITORY="example/project",
                         GITHUB_REF="refs/tags/v1.2.3", GH_TOKEN="fixture-not-a-secret",
-                        GITHUB_OUTPUT=str(self.output), FAKE_GH_STATE=str(self.state),
-                        RELEASE_BODY_SOURCE="changelog", RELEASE_CHANGELOG_PATH="CHANGELOG.md",
-                        RELEASE_TITLE="", RELEASE_ASSETS="")
+                        GITHUB_OUTPUT=str(self.output), FAKE_GH_STATE=str(self.state))
 
     def git(self, *args):
         return subprocess.run(["git", *args], cwd=self.repo, check=True,
                               capture_output=True, text=True).stdout
 
     def run_action(self, **env):
-        return subprocess.run(["bash", str(SCRIPT)], cwd=self.repo,
-                              env=dict(self.env, **env), capture_output=True, text=True)
+        inputs = {}
+        for variable, name in {
+            "RELEASE_BODY_SOURCE": "release-body-source",
+            "RELEASE_CHANGELOG_PATH": "release-changelog-path",
+            "RELEASE_TITLE": "release-title",
+            "RELEASE_ASSETS": "release-assets",
+        }.items():
+            if variable in env:
+                inputs[name] = env.pop(variable)
+        result, self.action_outputs = run_composite(
+            ROOT / "action.yml", inputs, dict(self.env, **env), self.repo, self.workflow_token)
+        return result
 
     def release(self):
         return json.loads(self.state.read_text()).get("release")
@@ -61,6 +69,16 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(self.release()["body"].strip(), "### Fixed\n\n- Login works again.")
         self.assertIn("release-created=true", self.output.read_text())
         self.assertIn("release-url=https://github.com/", self.output.read_text())
+        self.assertEqual(self.action_outputs["release-created"], "true")
+        self.assertEqual(self.action_outputs["release-url"], self.release()["html_url"])
+
+    def test_workflow_token_is_used_when_no_override_is_set(self):
+        result = self.run_action(GH_TOKEN="")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_missing_workflow_token_and_override_fail(self):
+        self.workflow_token = ""
+        self.assert_failed(self.run_action(GH_TOKEN=""), "GH_TOKEN")
 
     def test_custom_path_title_and_literal_assets(self):
         (self.repo / "docs").mkdir()
@@ -213,6 +231,8 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.release(), original)
         self.assertIn("release-created=false", self.output.read_text())
+        self.assertEqual(self.action_outputs["release-created"], "false")
+        self.assertEqual(self.action_outputs["release-url"], original["html_url"])
 
     def test_api_failures_do_not_attempt_creation(self):
         for status in [401, 403, 429, 500]:
@@ -228,8 +248,7 @@ class ReleaseTests(unittest.TestCase):
         for env, message in [({"RELEASE_BODY_SOURCE": "generated"}, "release-body-source"),
                              ({"RELEASE_ASSETS": "missing.zip"}, "asset"),
                              ({"RELEASE_ASSETS": "*.zip"}, "asset"),
-                             ({"GITHUB_REF": "refs/heads/main"}, "tag"),
-                             ({"GH_TOKEN": ""}, "GH_TOKEN")]:
+                             ({"GITHUB_REF": "refs/heads/main"}, "tag")]:
             with self.subTest(env=env):
                 self.assert_failed(self.run_action(**env), message)
 

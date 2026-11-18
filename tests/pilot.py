@@ -8,6 +8,8 @@ import subprocess
 import sys
 import tempfile
 
+from composite import run_composite
+
 root = Path(__file__).resolve().parents[1]
 consumer = Path(sys.argv[1]).resolve()
 changelog = (consumer / "CHANGELOG.md").read_text()
@@ -37,15 +39,18 @@ with tempfile.TemporaryDirectory() as directory:
     env = dict(os.environ, PATH=str(fixture / "bin") + os.pathsep + os.environ["PATH"],
                GITHUB_WORKSPACE=str(fixture), GITHUB_REF="refs/tags/" + tag,
                GITHUB_REPOSITORY="example/consumer", GH_TOKEN="fixture-not-a-secret",
-               FAKE_GH_STATE=str(state), GITHUB_OUTPUT=str(output),
-               RELEASE_BODY_SOURCE="changelog", RELEASE_CHANGELOG_PATH="CHANGELOG.md",
-               RELEASE_TITLE="", RELEASE_ASSETS="")
+               FAKE_GH_STATE=str(state), GITHUB_OUTPUT=str(output))
     for attempt in range(2):
-        subprocess.run(["bash", str(root / "scripts/release.sh")], env=env, check=True)
+        result, outputs = run_composite(root / "action.yml", {}, env, fixture, "workflow-token-fixture")
+        if result.returncode:
+            sys.exit(result.stderr)
+        print(result.stdout, end="")
         release = json.loads(state.read_text())["release"]
         assert release["body"].strip() == section[2].strip(), "Incorrect release body"
         assert release["name"] == "Release " + tag, "Incorrect release title"
         assert release["assets"] == {}, "Unexpected release assets"
+        assert outputs["release-url"] == release["html_url"], "Incorrect public release URL"
+        assert outputs["release-created"] == ("true" if attempt == 0 else "false")
     assert "release-created=true" in output.read_text()
     assert "release-created=false" in output.read_text()
     print(f"PASS: consumer changelog {tag}, release title, body, no assets, and rerun skip.")
